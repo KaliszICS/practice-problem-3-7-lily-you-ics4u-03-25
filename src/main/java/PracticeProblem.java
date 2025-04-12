@@ -1,27 +1,57 @@
+import java.util.Arrays;
+
 public class PracticeProblem {
-
 	public static void main(String args[]) {
-
+		String[][] maze = {
+			{"", "", "", "", ""},
+			{"", "*", "", "", ""},
+			{"", "*", "", "*", ""},
+			{"S", "*", "", "", "F"},
+		  };
+		  System.out.println(searchMazeMoves(maze));
 	}
 
-	public static void q1() {
-		//Write question 1 code here
+	public static int searchMazeMoves(String[][] arr){
+		int numMoves = 0;
+		int row = arr.length - 1;
+		int col = 0;
+		return searchMazeMovesHelper(arr, row, col , numMoves);
 	}
+	
+	public static int searchMazeMovesHelper(String[][] arr, int row, int col, int moves){
+		
+		if(row < 0 || row > arr.length-1 || col > arr[row].length-1 || col < 0){
+			return -1;
+		} 
+		
+		if(arr[row][col].equals("F")){
+			return moves;
+		}
 
-	public static void q2() {
-		//Write question 2 code here
-	}
+		if(arr[row][col].equals("*")){
+			return -1;
+		}
 
-	public static void q3() {
-		//Write question 3 code here
-	}
+		arr[row][col] = "*";
+		int movesUp = searchMazeMovesHelper(arr, row-1, col, moves + 1);
+		int movesRight = searchMazeMovesHelper(arr, row, col+1, moves + 1);
+		int movesDown = searchMazeMovesHelper(arr, row+1, col, moves + 1);
+		int movesLeft = searchMazeMovesHelper(arr, row, col-1, moves + 1);
+		arr[row][col] = "";
 
-	public static void q4() {
-		//Write question 4 code here
-	}
+		int[] movesArr = {movesUp, movesRight, movesDown, movesLeft};
+		Arrays.sort(movesArr);
 
-	public static void q5() {
-		//Write question 5 code here
+		int index = 0;
+		for(int i = movesArr.length-1; i >= 0; i--){
+			if(movesArr[i] != -1){
+				index = i;
+			}
+			
+		}
+
+		return(movesArr[index]);
+ 
 	}
 
 }
